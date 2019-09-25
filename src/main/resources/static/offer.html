@@ -1,0 +1,129 @@
+<!DOCTYPE html>  
+<html>  
+   <head>  
+      <title>Offers</title>  
+      <script src="/js/angular.min.js"></script>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+      <style>  
+         table, th , td {  
+            border: 1px solid grey;  
+            border-collapse: collapse;  
+            padding: 5px;  
+         }  
+           
+         table tr:nth-child(odd) {  
+            background-color: lightpink;  
+         }  
+           
+         table tr:nth-child(even) {  
+            background-color: lightyellow;  
+         }  
+      </style>  
+        
+   </head>  
+   <body>  
+        
+      <h3 align="right">To Subscribe,Login !!</h3>  
+      <!-- <div ng-app = "mainApp" ng-controller = "offerController">   -->
+           
+         <form name = "offerForm" novalidate ng-init="onLoad()">  
+<h3 ng-show="submituser">Hello {{submituser}} !!</h3>
+<div align="right">
+            <table border = "0">  
+               <tr>  
+                  <td>Enter first name:</td>  
+                  <td><input name = "name" type = "text" ng-model = "user.name" required>
+                     <td>Email: </td><td><input name = "email" type = "email" ng-model = "user.email" length = "100" required>  
+                  </td>  		 
+			<td>  
+                     <button ng-disabled = "offerForm.name.$dirty &&  
+                        offerForm.name.$invalid || offerForm.email.$dirty &&  
+                        offerForm.email.$invalid" ng-click="submit()" ng-hide="submituser">Login</button>  
+			<button ng-show="submituser" ng-click="reset()">Logout </button>
+                  </td> 
+			<td>  
+                     <button ng-click = "reset()">Reset</button>  
+                  </td>
+               </tr> 
+                      
+            </table> 
+</div>
+<h2> Search for Offers</h2>
+<table>
+<tr>
+<td>Category</td>
+<td>
+<select ng-model="industry">
+<option ng-repeat = "industry in industries" value="{{industry}}">{{industry}}</option>
+</select>
+</td>
+<td>Radius</td>
+<td>
+<select  ng-model="radius">
+<option ng-repeat = "radius in radii" value="{{radius}}">{{radius}}</option>
+</select>
+</td>
+</tr>
+<tr><td colspan=5><center>
+<input type="button" value="Search" ng-click="onSearch()"/></center>
+</td>
+</tr>
+</table>
+<br>
+<div>
+<table ng-show="searchoutlets">
+<tr align="center"><td colspan=4> Search Results </td></tr>
+<tr>
+<td>Outlet Id</td>
+<td>Outlet Name</td>
+<td ng-show="submituser">Preference</td>
+<td><table><tr>
+<td>Offer</td>
+<td>Address</td>
+<td>Phone</td>
+</table></tr>
+<tr ng-repeat="outlet in searchoutlets">
+<td>{{outlet.outletId}}</td>
+<td>{{outlet.outletName}}</td>
+<td ng-show="submituser"><input type="button" value="Add" ng-click="addpref(outlet.outletId,outlet.outletName)" > </td>
+<td>
+<table>
+<tr ng-repeat="offer in outlet.offers">
+<td>{{offer.offerName}}</td>
+<td>{{offer.address}}</td>
+<td>{{offer.phone}}</td>
+<td>Share<input type="checkbox" ng-model="offercheck" value="true"></td>
+<td ng-show="offercheck"><input type="text" ng-model="mailTo" /><input type="button" value="Send" ng-click="send(offer,mailTo)"/></td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<h2 ng-show="user.outlets">User {{name}} preferences</h2>
+<table>
+<tr ng-show="user.outlets">
+<td>Outlet Id</td>
+<td>Outlet Name</td>
+<td>Preference</td>
+</tr>
+<tr ng-repeat="outlet in user.outlets">
+<td>{{outlet.outletId}}</td>
+<td>{{outlet.outletName}}</td>
+<td><input type="button" value="Delete" ng-click="deletepref(outlet.outletId,outlet.outletName)" > </td>
+</tr>
+<tr  ng-show="user.outlets">
+<td colspan=3><center><input type="button" value="Save" ng-click="savepref()" ></center> </td>
+</tr>
+</table>
+</div>
+         </form>  
+      </div>  
+        
+      <script>  
+         //var mainApp = angular.module("mainApp", []);  
+           
+         
+      </script>  
+        
+   </body>  
+</html>  

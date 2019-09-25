@@ -1,0 +1,101 @@
+<!-- <html ng-app="outletApp"> -->
+<head>
+    <script src="/js/angular.min.js"></script>
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<h1> Outlet Info</h1>
+</head>
+<!-- <body ng-controller="outletController" class="container" > <br /> -->
+    <form class="form-horizontal" role="form" ng-init="onLoad()">
+	<div class="form-group" >
+            <label for="outletName" class="col-sm-3 control-label">Outlet Name</label>
+            <div class="col-sm-3">
+			<select id="industry" class="form-control" ng-model="outlet.outletName" ng-change="loadOutlet()" >
+				<option ng-repeat="name in outlets" value="{{name}}">
+				{{name}}
+				</option>
+				</select>
+				<label for="industry" class="col-sm-3 control-label">Or</label>
+                <input type="text" id="outletName" class="form-control" ng-model="outlet.outletName" />
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+        <div class="form-group">
+            <label for="industry" class="col-sm-3 control-label">Industry</label>
+            <div class="col-sm-3">
+                <select id="industry" class="form-control" ng-model="outlet.industry"  >
+				<option ng-repeat="industry in industries" value="{{industry}}">
+				{{industry}}
+				</option>
+				</select>
+				<label for="industry" class="col-sm-3 control-label">Or</label>
+				<input type="text" id="industry" class="form-control" ng-model="outlet.industry"  />
+            </div>
+			<div class="col-sm-3"></div>
+        </div>       
+        
+        <div class="form-group" >
+            <label for="Radius" class="col-sm-3 control-label">Radius</label>			
+            <div class="col-sm-3">
+                <input type="text" id="Radius" class="form-control" ng-model="outlet.radius"  />
+            </div>
+            <div class="col-sm-3"></div>
+        </div>		
+					
+		<div class="form-group" >
+            <label for="offers" class="col-sm-3 control-label">Offers</label>
+            <div class="col-sm-4">                
+				<div>
+				<label class="col-sm-3 control-label">Offer</label>				
+				<label class="col-sm-3 control-label">Address</label>
+				<label class="col-sm-3 control-label">Phone</label>		
+				</div>
+				<div class="col-sm-3"></div>
+			</div>
+		</div>
+		<div class="form-group" ng-repeat="offers in outlet.offers">
+            <label for="offers" class="col-sm-3 control-label"></label>
+            <div class="col-sm-4" >                
+				<div>				
+				<input type="text" class="col-sm-3" ng-model="offers.offerName"/>
+				<input type="text" class="col-sm-3" ng-model="offers.address"/>
+				<input type="text" class="col-sm-3" ng-model="offers.phone"/>
+				<input type="checkbox" checked = "{{offers.offerName}}" />
+				</div>
+				<div class="col-sm-3"></div>
+			</div>
+		</div>
+		<div class="form-group" >
+            <label for="addoffers" class="col-sm-3 control-label"></label>
+            <div class="col-sm-4">                
+				<div>				
+				<input type="text" class="col-sm-3" ng-model="addoffer.offerName"/>
+				<input type="text" class="col-sm-3" ng-model="addoffer.address"/>
+				<input type="text" class="col-sm-3" ng-model="addoffer.phone"/>
+				<input type="button" value = "Add" ng-click="addOffer()"/>
+				</div>
+				<div class="col-sm-3"></div>
+			</div>
+		</div>
+		<div class="form-group">            
+            <div class="col-sm-3">
+                <input type="hidden" id="outletId" class="form-control" ng-model="outlet.outletId"/>
+            </div>
+            <div class="col-sm-3"></div>
+        </div>		
+		<div class="form-group">            
+            <div class="col-sm-3">                
+            </div>
+            <div class="col-sm-3">			
+			<input type="button" value="Submit" class="btn btn-primary col-sm-offset-1" ng-click="submitOutlet()" />
+			</div>
+        </div>
+        
+    </form>
+    <script>
+     //1. create app module 
+        //var outletApp = angular.module('outletApp', []);		
+        //2. create controller
+        
+    </script>   
+<!-- </body> -->
+<!-- </html> -->

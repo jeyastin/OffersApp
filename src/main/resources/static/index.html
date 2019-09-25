@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta chrset="UTF 8">
+</head>
+<body ng-app="sampleApp">
+<title>Offer Site</title>
+<script src="/js/angular.min.js"></script>
+<script src = "/js/angular-route.min.js"></script>
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<h1> Offer Home</h1>
+
+<div class="container">
+    <ul>
+    	<li><a href="#home">Home</a></li>
+        <li><a href="#offer">Offer</a></li>
+        <li><a href="#outlet">Outlet</a></li>        
+    </ul>
+    <div ng-view></div>
+</div>
+
+<script>
+    var sampleApp = angular.module('sampleApp',['ngRoute']);
+    sampleApp.config(['$routeProvider',
+
+        function($routeProvider){
+        $routeProvider.
+        when('/outlet',{
+            templateUrl : '/outlet.html',
+            controller: 'outletController'
+        }).
+        when("/offer", {
+            templateUrl: '/offer.html',
+            controller: 'offerController'
+        });
+        when("/viewoffer", {
+            templateUrl: '/viewoffer.html',
+            controller: 'viewofferController'
+        });
+    }]);
+    
+    sampleApp.controller("outletController", function ($scope, $http) {  
+    	 
+		//4. copy originalStudent to student. student will be bind to a form 
+            $scope.outlet = angular.copy($scope.outlet);			
+			$scope.onLoad = function () {
+				$scope.industries = [];	
+				$scope.outlet = {};
+				$scope.outlet.outletId = 0;
+				$scope.outlet.offers=[];				
+                var onSuccess = function (data, status, headers, config) {				
+				$scope.industries = data.industry;
+				$scope.outlets = data.outlets;
+                    //alert('look up call success.');
+                };
+
+                var onError = function (data, status, headers, config) {				
+                    alert('look up Error occured.');
+                }								
+                $http.get('/getLookup')
+                    .success(onSuccess)
+                    .error(onError);
+
+            
+			}
+			
+			$scope.loadOutlet = function () {
+
+                var onSuccess = function (data, status, headers, config) {				
+				$scope.outlet = data;					
+                    //alert('outlet call success.');
+                };
+
+                var onError = function (data, status, headers, config) {				
+                    alert('outlet Error occured.');
+                }				
+                $http.get('/outlet/'+$scope.outlet.outletName)
+                    .success(onSuccess)
+                    .error(onError);
+
+            
+			}
+			
+			$scope.addOffer = function() {		
+			var typeObj = {offerName: $scope.addoffer.offerName,  address: $scope.addoffer.address,  phone: $scope.addoffer.phone};				
+			$scope.outlet.offers.push(typeObj);
+			$scope.addoffer.offerName = '';
+			$scope.addoffer.address = '';
+			$scope.addoffer.phone = '';	
+			};
+			
+            //5. create submitStudentForm() function. This will be called when user submits the form
+            $scope.submitOutlet = function () {
+
+                var onSuccess = function (data, status, headers, config) {				
+				$scope.outlet = data;				
+                    alert('Outlet info submitted successfully');
+					$scope.onLoad();
+                };
+
+                var onError = function (data, status, headers, config) {								
+                    alert('Outlet info submit failed');
+                }												
+                $http.post('/addOutletOffers',  $scope.outlet  )
+                    .success(onSuccess)
+                    .error(onError);
+
+            };		
+    });
+    
+    sampleApp.controller('offerController', function($scope, $http) {  
+		 
+		 $scope.onLoad = function () {
+				$scope.industries = [];	
+				$scope.radii=[];		
+               var onSuccess = function (data, status, headers, config) {				
+				$scope.industries = data.industry;
+				$scope.radii = data.radius;
+                   //alert('look up call success.');
+               };
+
+               var onError = function (data, status, headers, config) {				
+                   alert('look up Error occured.');
+               }								
+               $http.get('/getLookup')
+                   .success(onSuccess)
+                   .error(onError);
+
+           
+			}
+
+           $scope.reset = function(){  
+			$scope.user='';
+              $scope.user.name = '';   
+              $scope.user.email = '';  
+			   $scope.user.outlets = '';  
+			   $scope.industry='';
+			   $scope.radius='';
+		$scope.searchoutlets='';
+		$scope.outlets='';
+		$scope.submituser='';
+           }  
+$scope.onSearch = function(){  
+			   var onSuccess = function (data, status, headers, config) {				
+				$scope.searchoutlets = data;				
+                   //alert('look up call success.');
+               };
+
+               var onError = function (data, status, headers, config) {				
+                   alert('look up Error occured.');
+               }	
+               $http.get('/search?industry='+$scope.industry+'&radius='+$scope.radius)
+                   .success(onSuccess)
+                   .error(onError);
+    
+           } 
+
+$scope.submit = function(){  
+$scope.submituser=$scope.user.name;
+$scope.logout = $scope.user.name;
+			   var onSuccess = function (data, status, headers, config) {				
+				$scope.user.outlets = data.outlets;	
+if(data == ''){
+$scope.user.outlets = [];
+}				
+               };
+
+               var onError = function (data, status, headers, config) {				
+                   alert('user Error occured.');
+               }	
+               $http.get('/getUserOutlets/'+$scope.user.email)
+                   .success(onSuccess)
+                   .error(onError);
+                
+           } 
+
+$scope.savepref = function(){  
+var onSuccess = function (data, status, headers, config) {				
+alert('Preferences saved');					
+               };
+
+               var onError = function (data, status, headers, config) {				
+                   alert('user Error occured.');
+               }	
+               $http.post('/addUserOutlets', $scope.user)
+                   .success(onSuccess)
+                   .error(onError);
+
+                
+           } 
+
+$scope.send = function(offer,mailTo){  
+
+var mailTo = {mailTo: mailTo, offerTO: offer};
+var onSuccess = function (data, status, headers, config) {				
+$scope.mailTo='';
+$scope.offercheck='';
+alert('Mail sent');
+               };
+               var onError = function (data, status, headers, config) {
+		
+                   alert('Mail Error occured.');					
+               }	
+               $http.post('/sendMail', mailTo)
+                   .success(onSuccess)
+                   .error(onError);
+
+                
+           } 
+
+
+$scope.addpref = function(id,name){ 
+var pref = {"outletId":id,"outletName":name};
+var chk = 0;
+if($scope.user.outlets != ''){
+for (var i=0; i<$scope.user.outlets.length;i++) {
+ if ($scope.user.outlets[i].outletId == id) {
+   chk = 1;
+	i=$scope.user.outlets.length;
+ }
+}
+}
+if(chk==1){
+alert('Preference Already Added');
+}
+if(chk == 0){
+              $scope.user.outlets.push(pref); 
+}
+                
+           } 
+
+$scope.deletepref = function(id,name){ 
+for (var i=0; i<$scope.user.outlets.length;i++) {
+ if ($scope.user.outlets[i].outletId == id) {
+   $scope.user.outlets.splice(i,1); // removes the matched element
+   i = $scope.user.outlets.length;  // break out of the loop. Not strictly necessary
+ }
+}
+                
+           }
+             
+           $scope.reset();  
+        });  
+
+</script>
+</body>
+</html>
